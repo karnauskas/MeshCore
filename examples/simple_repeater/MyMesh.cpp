@@ -1,4 +1,5 @@
 #include "MyMesh.h"
+#include "MQTTObserver.h"
 #include <algorithm>
 
 /* ------------------------------ Config -------------------------------- */
@@ -482,6 +483,7 @@ void MyMesh::logRx(mesh::Packet *pkt, int len, float score) {
     bridge.sendPacket(pkt);
   }
 #endif
+  mqtt_observer_forward_rx(pkt, len, _radio->getLastSNR(), _radio->getLastRSSI());
 
   if (_logging) {
     File f = openAppend(PACKET_LOG_FILE);
@@ -508,6 +510,7 @@ void MyMesh::logTx(mesh::Packet *pkt, int len) {
     bridge.sendPacket(pkt);
   }
 #endif
+  mqtt_observer_forward_tx(pkt, len);
 
   if (_logging) {
     File f = openAppend(PACKET_LOG_FILE);
