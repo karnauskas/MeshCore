@@ -2,6 +2,7 @@
 #include <Mesh.h>
 
 #include "MyMesh.h"
+#include "MQTTObserver.h"
 
 #ifdef DISPLAY_CLASS
   #include "UITask.h"
@@ -105,6 +106,7 @@ void setup() {
   sensors.begin();
 
   the_mesh.begin(fs);
+  mqtt_observer_begin(the_mesh.getRTCClock());
 
 #ifdef DISPLAY_CLASS
   ui_task.begin(the_mesh.getNodePrefs(), FIRMWARE_BUILD_DATE, FIRMWARE_VERSION);
@@ -196,6 +198,7 @@ void loop() {
 #endif
 
   the_mesh.loop();
+  mqtt_observer_loop();
   sensors.loop();
 #ifdef DISPLAY_CLASS
   ui_task.loop();
